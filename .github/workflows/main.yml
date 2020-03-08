@@ -44,12 +44,13 @@ jobs:
         wget https://raw.githubusercontent.com/eclipsesource/J2V8/master/v8/android-x64/args.gn
         cd ../../
         ninja -C out.gn/x64.release -t clean
-        # ninja -C out.gn/x64.release v8_monolith
-        zip -q -r out.zip ./out.gn
+        ninja -C out.gn/x64.release v8_monolith
+        cd out.gn
+        zip -q -r release.zip ./x64.release
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         # Artifact name
-        name: out.zip
+        name: release.zip
         # Directory containing files to upload
         path: ./
