@@ -16,7 +16,10 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        image-name: [j2v8]
+        image-version: [1.0]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -28,13 +31,20 @@ jobs:
 
     # Runs a set of commands using the runners shell
     - name: Run a multi-line script
+      env:
+        aliyun_username: ${{ secrets.Aliyun_Username }}
+        aliyun_password: ${{ secrets.Aliyun_Password }}
       run: |
         mkdir dock
         cd dock
         wget https://raw.githubusercontent.com/jinhan1414/mysitre/master/Dockerfile
-        docker build -t j2v8 .
+        sudo docker login --username=${aliyun_username} registry.cn-chengdu.aliyuncs.com --password=${{ secrets.aliyun_password }}
+        sudo docker build -t ${{ matrix.image-name }}:${{ matrix.image-version }} .
         docker images
+        sudo docker tag ${{ matrix.image-name }}:${{ matrix.image-version }} registry.cn-chengdu.aliyuncs.com/jinchengsong001/chengdu:${{ matrix.image-version }}
+        sudo docker push registry.cn-chengdu.aliyuncs.com/jinchengsong001/chengdu:${{ matrix.image-version }}
     - name: Cache
+      id: cache-j2v8
       uses: actions/cache@v1.1.2
       with:
         # A directory to store and save the cache
