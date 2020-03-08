@@ -29,28 +29,18 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Run a multi-line script
       run: |
-        git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-        export PATH=`pwd`/depot_tools:$PATH
-        gclient
-        fetch v8
-        echo "target_os= ['android']">>.gclient
-        cd v8
-        gclient sync
-        ./build/install-build-deps.sh
-        git pull && gclient sync
-        ./tools/dev/v8gen.py x64.release -vv
-        rm out.gn/x64.release/args.gn
-        cd out.gn/x64.release
-        wget https://raw.githubusercontent.com/eclipsesource/J2V8/master/v8/android-x64/args.gn
-        cd ../../
-        ninja -C out.gn/x64.release -t clean
-        ninja -C out.gn/x64.release v8_monolith
-        cd out.gn
-        zip -q -r release.zip ./x64.release
-    - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
+        mkdir dock
+        cd dock
+        wget https://raw.githubusercontent.com/jinhan1414/mysitre/master/Dockerfile
+        docker build -t j2v8 .
+        docker images
+    - name: Cache
+      uses: actions/cache@v1.1.2
       with:
-        # Artifact name
-        name: release.zip
-        # Directory containing files to upload
-        path: ./
+        # A directory to store and save the cache
+        path: dock
+        # An explicit key for restoring and saving the cache
+        key: hahah
+        # An ordered list of keys to use for restoring the cache if no cache hit occurred for key
+        restore-keys: hahah # optional        
+        
