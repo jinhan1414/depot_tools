@@ -30,11 +30,19 @@ jobs:
     - name: Run a multi-line script
       run: |
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-        export PATH=`pwd`/depot_tools:$PATH
-        gclient
-        fetch v8
-        cd v8
-        gclient sync
-        ./build/install-build-deps.sh
-        git pull && gclient sync
-        tools/dev/gm.py x64.release
+        # export PATH=`pwd`/depot_tools:$PATH
+        # gclient
+        # fetch v8
+        # cd v8
+        # gclient sync
+        # ./build/install-build-deps.sh
+        # git pull && gclient sync
+        # tools/dev/gm.py x64.release
+        zip -q -r depot_tools.zip ./depot_tools
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: depot_tools.zip
+        # Directory containing files to upload
+        path: ./
