@@ -33,3 +33,8 @@ jobs:
         export PATH=`pwd`/depot_tools:$PATH
         gclient
         fetch v8
+        cd v8
+        gclient sync
+        ./build/install-build-deps.sh
+        git pull && gclient sync
+        tools/dev/gm.py x64.release
