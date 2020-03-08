@@ -30,19 +30,26 @@ jobs:
     - name: Run a multi-line script
       run: |
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-        # export PATH=`pwd`/depot_tools:$PATH
-        # gclient
-        # fetch v8
-        # cd v8
-        # gclient sync
-        # ./build/install-build-deps.sh
-        # git pull && gclient sync
-        # tools/dev/gm.py x64.release
-        zip -q -r depot_tools.zip ./depot_tools
+        export PATH=`pwd`/depot_tools:$PATH
+        gclient
+        fetch v8
+        echo "target_os= ['android']">>.gclient
+        cd v8
+        gclient sync
+        ./build/install-build-deps.sh
+        git pull && gclient sync
+        ./tools/dev/v8gen.py x64.release -vv
+        rm out.gn/x64.release/args.gn
+        cd out.gn/x64.release
+        wget https://raw.githubusercontent.com/eclipsesource/J2V8/master/v8/android-x64/args.gn
+        cd ../../
+        ninja -C out.gn/x64.release -t clean
+        # ninja -C out.gn/x64.release v8_monolith
+        zip -q -r out.zip ./out.gn
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         # Artifact name
-        name: depot_tools.zip
+        name: out.zip
         # Directory containing files to upload
         path: ./
