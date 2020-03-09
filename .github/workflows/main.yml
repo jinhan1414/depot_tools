@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         image-name: [j2v8]
-        image-version: [1.0]
+        image-version: [2.0]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -42,15 +42,5 @@ jobs:
         sudo docker build -t ${{ matrix.image-name }}:${{ matrix.image-version }} .
         docker images
         sudo docker tag ${{ matrix.image-name }}:${{ matrix.image-version }} registry.cn-chengdu.aliyuncs.com/jinchengsong001/chengdu:${{ matrix.image-version }}
-        sudo docker push registry.cn-chengdu.aliyuncs.com/jinchengsong001/chengdu:${{ matrix.image-version }}
-    - name: Cache
-      id: cache-j2v8
-      uses: actions/cache@v1.1.2
-      with:
-        # A directory to store and save the cache
-        path: dock
-        # An explicit key for restoring and saving the cache
-        key: hahah
-        # An ordered list of keys to use for restoring the cache if no cache hit occurred for key
-        restore-keys: hahah # optional        
+        sudo docker push registry.cn-chengdu.aliyuncs.com/jinchengsong001/chengdu:${{ matrix.image-version }}       
         
