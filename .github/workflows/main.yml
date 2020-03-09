@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         image-name: [j2v8]
-        image-version: [2.3]
+        image-version: [2.4]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
